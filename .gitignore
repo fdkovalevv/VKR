@@ -1,0 +1,19 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Raw datasets and images are too large for GitHub.
+data/
+
+# Keep generated artifacts local by default.
+artifacts/
+
+# Model checkpoints and cached arrays.
+*.pt
+*.pth
+*.ckpt
+*.npz
+*.npy
