@@ -1,25 +1,27 @@
-# Мультимодальное определение контрафактных товаров Ozon
+# Multimodal Counterfeit Product Detection on Ozon
 
-Репозиторий содержит код дипломной работы по задаче бинарной классификации товарных карточек Ozon: определить, относится ли товар к контрафактным/проблемным по целевой метке `resolution`.
+[Русская версия](README.ru.md)
 
-В работе сравниваются модели, использующие разные источники данных:
+This repository contains the code for a bachelor’s thesis on binary classification of Ozon product listings. The task is to determine whether a product is classified as counterfeit or otherwise problematic according to the target label `resolution`.
 
-- табличные признаки товара и продавца;
-- текстовые поля карточки товара;
-- изображения товаров;
-- мультимодальные комбинации этих признаков.
+The thesis compares models that use different sources of data:
 
-## Структура проекта
+- tabular product and seller features
+- text fields from product listings
+- product images
+- multimodal combinations of these features
 
-- `src/ozon_counterfeit/` - основной код для загрузки данных, подготовки признаков, split, моделей и обучения.
-- `scripts/` - скрипты для подготовки manifest, проверок данных, обучения, инференса и построения графиков.
-- `*.ipynb` - ноутбуки с экспериментами и анализом.
-- `docs/` - краткое описание пайплайна проекта.
-- `artifacts/` - результаты запусков: manifest, метрики, графики, предсказания и промежуточные файлы.
+## Project Structure
 
-## Данные
+- `src/ozon_counterfeit/` - core code for loading data, preparing features, splitting data, defining models, and training.
+- `scripts/` - scripts for building the manifest, checking data, training models, running inference, and generating plots.
+- `*.ipynb` - notebooks containing experiments and analysis.
+- `docs/` - a brief description of the project pipeline.
+- `artifacts/` - run outputs, including the manifest, metrics, plots, predictions, and intermediate files.
 
-Ожидаемая структура данных:
+## Data
+
+Expected data directory structure:
 
 ```text
 data/
@@ -32,9 +34,9 @@ data/
     *.png
 ```
 
-Изображения связываются с таблицей по `ItemID`.
+Images are matched to tabular records by `ItemID`.
 
-## Установка
+## Installation
 
 ```bash
 python3 -m venv .venv
@@ -42,21 +44,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Основной запуск
+## Running the Pipeline
 
-Построить manifest и split:
+Build the manifest and create the data splits:
 
 ```bash
 python3 scripts/build_manifest.py
 ```
 
-Проверить данные:
+Run data checks:
 
 ```bash
 python3 scripts/run_data_checks.py
 ```
 
-Запустить обучение базовых экспериментов:
+Train the baseline models:
 
 ```bash
 python3 scripts/train_experiment.py --experiment e0
@@ -64,23 +66,23 @@ python3 scripts/train_experiment.py --experiment e1
 python3 scripts/train_experiment.py --experiment e2
 ```
 
-Собрать таблицу метрик:
+Compile the metrics table:
 
 ```bash
 python3 scripts/collect_results.py
 ```
 
-Построить PR-AUC графики:
+Generate PR-AUC comparison plots:
 
 ```bash
 python3 scripts/plot_pr_auc_comparisons.py
 ```
 
-## Результаты
+## Results
 
-Краткие результаты на внутреннем test split:
+Summary of results on the internal test split:
 
-| Модель | PR-AUC | Precision | Recall | F1 |
+| Model | PR-AUC | Precision | Recall | F1 |
 |---|---:|---:|---:|---:|
 | Tabular only | 0.225 | 0.323 | 0.311 | 0.317 |
 | Text only | 0.509 | 0.449 | 0.716 | 0.552 |
@@ -89,12 +91,12 @@ python3 scripts/plot_pr_auc_comparisons.py
 | All modalities, gated fusion | 0.663 | 0.645 | 0.563 | 0.601 |
 | Final late fusion | 0.630 | 0.622 | 0.577 | 0.599 |
 
-Финальная late fusion модель выбиралась по validation PR-AUC и достигла `0.808` на validation и `0.630` на test.
+The final late-fusion model was selected based on validation PR-AUC. It achieved a PR-AUC of `0.808` on the validation split and `0.630` on the test split.
 
-Основные артефакты сохраняются в `artifacts/`:
+The main artifacts are saved under `artifacts/`:
 
-- `artifacts/experiments/` - обученные эксперименты и метрики;
-- `artifacts/reports/` - итоговые таблицы и графики;
-- `artifacts/predictions/` - предсказания для внешнего test.
+- `artifacts/experiments/` - outputs and metrics from training runs.
+- `artifacts/reports/` - final tables and plots.
+- `artifacts/predictions/` - predictions for the external test set.
 
-Ключевая идея проекта - проверить, насколько объединение табличных, текстовых и визуальных признаков улучшает качество определения контрафактных товаров по сравнению с отдельными модальностями.
+The project evaluates how much combining tabular, text, and image features improves counterfeit product detection compared with using individual modalities.
